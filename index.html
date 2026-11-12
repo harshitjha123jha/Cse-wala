@@ -1,126 +1,117 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSE Timetable</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background: #f1f5f9; padding: 15px; display: flex; justify-content: center; }
-    .app { width: 100%; max-width: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e2e8f0; }
-    .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 18px; text-align: center; }
-    .header h2 { font-size: 20px; margin-bottom: 4px; }
-    .header p { font-size: 12px; opacity: 0.9; }
-    .controls { padding: 15px; background: #f8fafc; border-bottom: 1px solid #f1f5f9; }
-    .label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; display: block; }
-    .gt { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #e2e8f0; padding: 4px; border-radius: 10px; margin-bottom: 14px; }
-    .gt button { border: none; padding: 8px; border-radius: 8px; font-weight: 700; font-size: 13px; color: #475569; background: transparent; cursor: pointer; transition: 0.2s; }
-    .gt button.active { background: white; color: #1e40af; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
-    .days { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
-    .days button { border: 1px solid #cbd5e1; background: white; color: #475569; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
-    .days button.active { background: #1e40af; color: white; border-color: #1e40af; }
-    .list { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-    .card { border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; border-left: 4px solid #3b82f6; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-    .card.lab { border-left-color: #10b981; background: #f0fdf4; }
-    .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .time { font-size: 12px; font-weight: 700; color: #1e40af; background: #dbeafe; padding: 3px 8px; border-radius: 6px; }
-    .card.lab .time { color: #047857; background: #d1fae5; }
-    .badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: #f1f5f9; color: #475569; }
-    .title { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 6px; line-height: 1.3; }
-    .meta { font-size: 12px; color: #64748b; display: flex; flex-direction: column; gap: 3px; }
+    body { background: #f1f5f9; padding: 12px; display: flex; justify-content: center; }
+    .app { width: 100%; max-width: 450px; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    .top-bar { background: #1e40af; color: #fff; padding: 16px; text-align: center; }
+    .top-bar h2 { font-size: 19px; }
+    .top-bar p { font-size: 12px; opacity: 0.85; margin-top: 3px; }
+    .menu { padding: 14px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+    .lbl { font-size: 11px; font-weight: bold; color: #64748b; margin-bottom: 5px; display: block; }
+    .grp-box { display: flex; gap: 6px; background: #e2e8f0; padding: 4px; border-radius: 10px; margin-bottom: 12px; }
+    .grp-box button { flex: 1; border: none; padding: 8px; border-radius: 8px; font-weight: bold; background: transparent; color: #475569; cursor: pointer; }
+    .grp-box button.on { background: #fff; color: #1e40af; }
+    .day-box { display: flex; gap: 5px; overflow-x: auto; }
+    .day-box button { border: 1px solid #cbd5e1; background: #fff; color: #475569; padding: 6px 11px; border-radius: 18px; font-size: 12px; font-weight: bold; cursor: pointer; }
+    .day-box button.on { background: #1e40af; color: #fff; border-color: #1e40af; }
+    .cards { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .item { border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 12px; padding: 12px; background: #fff; }
+    .item.lab { border-left-color: #10b981; background: #f0fdf4; }
+    .row { display: flex; justify-content: space-between; font-size: 11px; font-weight: bold; margin-bottom: 6px; }
+    .tm { color: #1e40af; background: #dbeafe; padding: 2px 7px; border-radius: 5px; }
+    .lab .tm { color: #047857; background: #d1fae5; }
+    .tag { color: #475569; background: #f1f5f9; padding: 2px 7px; border-radius: 5px; }
+    .sub { font-size: 14px; font-weight: bold; color: #1e293b; margin-bottom: 5px; }
+    .info { font-size: 12px; color: #475569; line-height: 1.5; }
   </style>
 </head>
 <body>
-
 <div class="app">
-  <div class="header">
+  <div class="top-bar">
     <h2>CSE Department</h2>
-    <p>Class Timetable & Lab Schedule</p>
+    <p>Class & Lab Timetable</p>
   </div>
-
-  <div class="controls">
-    <span class="label">Select Group</span>
-    <div class="gt">
-      <button class="active" onclick="setGroup('G1', this)">Group G1</button>
-      <button onclick="setGroup('G2', this)">Group G2</button>
+  <div class="menu">
+    <span class="lbl">SELECT GROUP</span>
+    <div class="grp-box" id="gBtns">
+      <button class="on" onclick="chgG('G1',0)">Group G1</button>
+      <button onclick="chgG('G2',1)">Group G2</button>
     </div>
-
-    <span class="label">Select Day</span>
-    <div class="days" id="dayBtns">
-      <button class="active" onclick="setDay('Monday', this)">Mon</button>
-      <button onclick="setDay('Tuesday', this)">Tue</button>
-      <button onclick="setDay('Wednesday', this)">Wed</button>
-      <button onclick="setDay('Thursday', this)">Thu</button>
-      <button onclick="setDay('Friday', this)">Fri</button>
-      <button onclick="setDay('Saturday', this)">Sat</button>
+    <span class="lbl">SELECT DAY</span>
+    <div class="day-box" id="dBtns">
+      <button class="on" onclick="chgD('Mon',0)">Mon</button>
+      <button onclick="chgD('Tue',1)">Tue</button>
+      <button onclick="chgD('Wed',2)">Wed</button>
+      <button onclick="chgD('Thu',3)">Thu</button>
+      <button onclick="chgD('Fri',4)">Fri</button>
+      <button onclick="chgD('Sat',5)">Sat</button>
     </div>
   </div>
-
-  <div class="list" id="scheduLeList"></div>
+  <div class="cards" id="out"></div>
 </div>
-
 <script>
-  const schedule = [
-    { day: "Monday", time: "10:00 - 11:00", group: "Whole Class", code: "100108", title: "Computer Fundamentals & Emerging Technologies", type: "Lecture", venue: "Room 1", faculty: "Mrs. Priti Kumari", ta: "" },
-    { day: "Monday", time: "11:00 - 12:00", group: "Whole Class", code: "100104", title: "Engineering Physics", type: "Lecture", venue: "Room 1", faculty: "Dr. Mukesh Kumar Pandey", ta: "" },
-    { day: "Monday", time: "12:00 - 01:00", group: "Whole Class", code: "100105", title: "Introduction to AI", type: "Lecture", venue: "Room 1", faculty: "Mr. Hemant Razz", ta: "" },
-    { day: "Monday", time: "02:00 - 03:00", group: "Whole Class", code: "100111", title: "Basics of Electrical & Electronics Engineering", type: "Lecture", venue: "Room 1", faculty: "Mr. Sanat", ta: "" },
-    { day: "Monday", time: "03:00 - 04:00", group: "Whole Class", code: "100102", title: "Engineering Mathematics - I", type: "Lecture", venue: "Room 1", faculty: "Dr. Matiram Das", ta: "" },
-    { day: "Monday", time: "04:00 - 05:00", group: "Whole Class", code: "100110", title: "Essence of Indian Constitution", type: "Lecture", venue: "Room 1", faculty: "Mr. Abhishek Kumar", ta: "" },
-
-    { day: "Tuesday", time: "11:00 - 12:00", group: "Whole Class", code: "100109", title: "Universal Human Values", type: "Lecture", venue: "Room 1", faculty: "Mr. Sumit Sardesai", ta: "" },
-    { day: "Tuesday", time: "12:00 - 01:00", group: "Whole Class", code: "100104", title: "Engineering Physics", type: "Lecture", venue: "Room 1", faculty: "Dr. Mukesh Kumar Pandey", ta: "" },
-    { day: "Tuesday", time: "02:00 - 03:00", group: "Whole Class", code: "100102", title: "Engineering Mathematics - I", type: "Lecture", venue: "Room 1", faculty: "Dr. Matiram Das", ta: "" },
-    { day: "Tuesday", time: "03:00 - 04:00", group: "Whole Class", code: "100105", title: "Introduction to AI", type: "Lecture", venue: "Room 1", faculty: "Mr. Hemant Razz", ta: "" },
-    { day: "Tuesday", time: "04:00 - 05:00", group: "Whole Class", code: "100110", title: "Essence of Indian Constitution", type: "Lecture", venue: "Room 1", faculty: "Mr. Abhishek Kumar", ta: "" },
-
-    { day: "Wednesday", time: "11:00 - 12:00", group: "Whole Class", code: "100104", title: "Engineering Physics", type: "Lecture", venue: "Room 1", faculty: "Dr. Mukesh Kumar Pandey", ta: "" },
-    { day: "Wednesday", time: "12:00 - 01:00", group: "Whole Class", code: "100111", title: "Basics of Electrical & Electronics Engineering", type: "Lecture", venue: "Room 1", faculty: "Mr. Sanat", ta: "" },
-    { day: "Wednesday", time: "02:00 - 04:00", group: "G1", code: "100104P", title: "Engineering Physics Lab", type: "Lab", venue: "Physics Lab", faculty: "Dr. Mukesh Kumar Pandey", ta: "Mr. Santu Kumar" },
-    { day: "Wednesday", time: "04:00 - 05:00", group: "G2", code: "100112P", title: "Programming for Problem Solving Lab", type: "Lab", venue: "Computer Centre", faculty: "Mr. Arun Kumar", ta: "Mr. Ravi Kumar" },
-
-    { day: "Thursday", time: "11:00 - 12:00", group: "Whole Class", code: "100111", title: "Basics of Electrical & Electronics Engineering", type: "Lecture", venue: "Room 2", faculty: "Mr. Sanat", ta: "" },
-    { day: "Thursday", time: "12:00 - 01:00", group: "Whole Class", code: "100108", title: "Computer Fundamentals & Emerging Technologies", type: "Lecture", venue: "Room 2", faculty: "Mrs. Priti Kumari", ta: "" },
-    { day: "Thursday", time: "02:00 - 03:00", group: "G2", code: "100112P", title: "Programming for Problem Solving Lab", type: "Lab", venue: "Computer Centre", faculty: "Mr. Arun Kumar", ta: "" },
-    { day: "Thursday", time: "04:00 - 05:00", group: "Whole Class", code: "100102", title: "Engineering Mathematics - I", type: "Lecture", venue: "Room 2", faculty: "Dr. Matiram Das", ta: "" },
-
-    { day: "Friday", time: "10:00 - 12:00", group: "G1", code: "100111P", title: "Basics of Electrical & Electronics Engineering Lab", type: "Lab", venue: "Electrical Lab", faculty: "Mr. Sanat", ta: "Mr. Nikhil Ranjan" },
-    { day: "Friday", time: "12:00 - 03:00", group: "G1", code: "100112P", title: "Programming for Problem Solving Lab", type: "Lab", venue: "Computer Centre", faculty: "Mr. Arun Kumar", ta: "Mr. Ravi Kumar" },
-    { day: "Friday", time: "03:00 - 04:00", group: "Whole Class", code: "100109", title: "Universal Human Values", type: "Lecture", venue: "Room 1", faculty: "Mr. Sumit Sardesai", ta: "" },
-    { day: "Friday", time: "04:00 - 05:00", group: "Whole Class", code: "100108", title: "Computer Fundamentals & Emerging Technologies", type: "Lecture", venue: "Room 1", faculty: "Mrs. Priti Kumari", ta: "" },
-
-    { day: "Saturday", time: "10:00 - 11:00", group: "Whole Class", code: "100110", title: "Essence of Indian Constitution", type: "Lecture", venue: "Room 1", faculty: "Mr. Abhishek Kumar", ta: "" },
-    { day: "Saturday", time: "11:00 - 01:00", group: "G2", code: "100104P", title: "Engineering Physics Lab", type: "Lab", venue: "Physics Lab", faculty: "Dr. Mukesh Kumar Pandey", ta: "Mr. Santu Kumar" },
-    { day: "Saturday", time: "02:00 - 03:00", group: "Whole Class", code: "100105", title: "Introduction to AI", type: "Lecture", venue: "Room 1", faculty: "Mr. Hemant Razz", ta: "" },
-    { day: "Saturday", time: "03:00 - 05:00", group: "G2", code: "100111P", title: "Basics of Electrical & Electronics Engineering Lab", type: "Lab", venue: "Electrical Lab", faculty: "Mr. Sanat", ta: "Mr. Nikhil Ranjan" }
+  var list = [
+    ["Mon","10-11","All","100108","Computer Fundamentals & Emerging Tech","Lecture","Room 1","Mrs. Priti Kumari",""],
+    ["Mon","11-12","All","100104","Engineering Physics","Lecture","Room 1","Dr. Mukesh Kumar Pandey",""],
+    ["Mon","12-01","All","100105","Introduction to AI","Lecture","Room 1","Mr. Hemant Razz",""],
+    ["Mon","02-03","All","100111","Basics of Electrical & Electronics","Lecture","Room 1","Mr. Sanat",""],
+    ["Mon","03-04","All","100102","Engineering Mathematics - I","Lecture","Room 1","Dr. Matiram Das",""],
+    ["Mon","04-05","All","100110","Essence of Indian Constitution","Lecture","Room 1","Mr. Abhishek Kumar",""],
+    ["Tue","11-12","All","100109","Universal Human Values","Lecture","Room 1","Mr. Sumit Sardesai",""],
+    ["Tue","12-01","All","100104","Engineering Physics","Lecture","Room 1","Dr. Mukesh Kumar Pandey",""],
+    ["Tue","02-03","All","100102","Engineering Mathematics - I","Lecture","Room 1","Dr. Matiram Das",""],
+    ["Tue","03-04","All","100105","Introduction to AI","Lecture","Room 1","Mr. Hemant Razz",""],
+    ["Tue","04-05","All","100110","Essence of Indian Constitution","Lecture","Room 1","Mr. Abhishek Kumar",""],
+    ["Wed","11-12","All","100104","Engineering Physics","Lecture","Room 1","Dr. Mukesh Kumar Pandey",""],
+    ["Wed","12-01","All","100111","Basics of Electrical & Electronics","Lecture","Room 1","Mr. Sanat",""],
+    ["Wed","02-04","G1","100104P","Engineering Physics Lab","Lab","Physics Lab","Dr. Mukesh Kumar Pandey","Mr. Santu Kumar"],
+    ["Wed","04-05","G2","100112P","Programming for Problem Solving Lab","Lab","Computer Centre","Mr. Arun Kumar","Mr. Ravi Kumar"],
+    ["Thu","11-12","All","100111","Basics of Electrical & Electronics","Lecture","Room 2","Mr. Sanat",""],
+    ["Thu","12-01","All","100108","Computer Fundamentals & Emerging Tech","Lecture","Room 2","Mrs. Priti Kumari",""],
+    ["Thu","02-03","G2","100112P","Programming for Problem Solving Lab","Lab","Computer Centre","Mr. Arun Kumar",""],
+    ["Thu","04-05","All","100102","Engineering Mathematics - I","Lecture","Room 2","Dr. Matiram Das",""],
+    ["Fri","10-12","G1","100111P","Basics of Electrical & Electronics Lab","Lab","Electrical Lab","Mr. Sanat","Mr. Nikhil Ranjan"],
+    ["Fri","12-03","G1","100112P","Programming for Problem Solving Lab","Lab","Computer Centre","Mr. Arun Kumar","Mr. Ravi Kumar"],
+    ["Fri","03-04","All","100109","Universal Human Values","Lecture","Room 1","Mr. Sumit Sardesai",""],
+    ["Fri","04-05","All","100108","Computer Fundamentals & Emerging Tech","Lecture","Room 1","Mrs. Priti Kumari",""],
+    ["Sat","10-11","All","100110","Essence of Indian Constitution","Lecture","Room 1","Mr. Abhishek Kumar",""],
+    ["Sat","11-01","G2","100104P","Engineering Physics Lab","Lab","Physics Lab","Dr. Mukesh Kumar Pandey","Mr. Santu Kumar"],
+    ["Sat","02-03","All","100105","Introduction to AI","Lecture","Room 1","Mr. Hemant Razz",""],
+    ["Sat","03-05","G2","100111P","Basics of Electrical & Electronics Lab","Lab","Electrical Lab","Mr. Sanat","Mr. Nikhil Ranjan"]
   ];
-
-  let currentGroup = 'G1';
-  let currentDay = 'Monday';
-
-  function setGroup(group, btn) {
-    currentGroup = group;
-    document.querySelectorAll('.gt button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render();
+  var g = "G1", d = "Mon";
+  function chgG(val, idx) {
+    g = val;
+    var b = document.getElementById("gBtns").children;
+    for (var i = 0; i < b.length; i++) b[i].className = (i == idx) ? "on" : "";
+    load();
   }
-
-  function setDay(day, btn) {
-    currentDay = day;
-    document.querySelectorAll('.days button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render();
+  function chgD(val, idx) {
+    d = val;
+    var b = document.getElementById("dBtns").children;
+    for (var i = 0; i < b.length; i++) b[i].className = (i == idx) ? "on" : "";
+    load();
   }
-
-  function render() {
-    const list = document.getElementById('scheduleList');
-    const filtered = schedule.filter(item => 
-      item.day === currentDay && (item.group === 'Whole Class' || item.group === currentGroup)
-    );
-
-    list.innerHTML = filtered.map(item => `
-      <div class="card ${item.type === 'Lab' ? 'lab' : ''}">
-        <div class="top">
-          <span class="time">🕒 ${item.time}</span>
-
-  
+  function load() {
+    var h = "";
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i];
+      if (r[0] == d && (r[2] == "All" || r[2] == g)) {
+        h += '<div class="item ' + (r[5] == "Lab" ? "lab" : "") + '">' +
+             '<div class="row"><span class="tm">🕒 ' + r[1] + '</span><span class="tag">' + r[5] + ' • ' + r[3] + '</span></div>' +
+             '<div class="sub">' + r[4] + '</div>' +
+             '<div class="info">📍 <b>Venue:</b> ' + r[6] + ' (' + r[2] + ')<br>👨‍🏫 <b>Faculty:</b> ' + r[7] +
+             (r[8] ? '<br>🧑‍💻 <b>TA:</b> ' + r[8] : '') + '</div></div>';
+      }
+    }
+    document.getElementById("out").innerHTML = h;
+  }
+  load();
+</script>
+</body>
+</html>
